@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>I'm a Map</title>
+
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEIFe5w60jigJHiQ4sREHXU9hF8UR9z2o"></script>
+		<script src="knockout/dist/knockout.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<link rel="stylesheet" href="style.css">
+		<script>
+			function initMap() {
+				var mapOptions = {
+					center: {lat: -34.397, lng: 150.644},
+					zoom: 8
+				}
+				var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+			}
+			google.maps.event.addDomListener(window, 'load', initMap);
+		</script>
+	</head>
+
+	<body>
+		mlighty
+		<input id="search" type="text" />
+		<div id="map-canvas"></div>
+	</body>
+</html>
