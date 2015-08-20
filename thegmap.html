@@ -3,7 +3,9 @@
 	<head>
 		<title>I'm a Map</title>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEIFe5w60jigJHiQ4sREHXU9hF8UR9z2o"></script>
+		<script src="doubled_javascript_helper_library.js"></script>
+		<script src="map_utils.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry"></script>
 		<script src="initmap.js"></script>
 		<script src="knockout/dist/knockout.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -15,19 +17,19 @@
 	</head>
 
 	<body>
-		<div class="container-fluid">
+		<div class="container height-full">
 			<div class="row">
 				<div class="col-md-12">
 					<h1>Best Google Maps Project Yet</h1>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<input id="search" type="text" />
+			<div class="row height-75">
+				<div class="col-md-6 height-full">
+					<input id="google-search" />
 					<div id="map-canvas"></div>
 				</div>
-				<div class="col-md-6">
-					<div id="map-visited-list"></div>
+				<div class="col-md-6 height-full">
+					<div id="map-visited-list" class="width-full height-full"></div>
 				</div>
 			</div>
 		</div>

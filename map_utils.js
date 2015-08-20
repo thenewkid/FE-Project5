@@ -79,6 +79,13 @@ function emptyBounds() {
 	return new google.maps.LatLngBounds();
 }
 
+function createBounds(lat, lng) {
+
+	return new google.maps.LatLngBounds(
+		new google.maps.LatLng(lat, lng)
+	);
+
+}
 function fitBounds(map, bounds) {
 	map.fitBounds(bounds);
 }
