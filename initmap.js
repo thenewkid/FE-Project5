@@ -125,6 +125,11 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 			addMapListener(marker, 'click', function() {
 				infoWindow.setContent(place.formatted_address);
 				infoWindow.open(map, this);
+				this.setAnimation(google.maps.Animation.BOUNCE);
+
+				setTimeout(function() {
+					marker.setAnimation(null);
+				}, 3000);
 			});
 
 			addPlace(place);

@@ -46,7 +46,9 @@ function createMarker(place, map) {
 	return new google.maps.Marker({
 		position: place.geometry.location,
 		title: place.formatted_address,
-		map: map
+		map: map,
+		draggable: true,
+		animation: google.maps.Animation.DROP
 	});
 }
 
