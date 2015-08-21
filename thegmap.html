@@ -29,9 +29,16 @@
 					<div id="map-canvas"></div>
 				</div>
 				<div class="col-md-6 height-full">
-					<div id="map-visited-list" class="width-full height-full"></div>
+
+					<div id="map-visited-list" class="width-full height-full">
+						<!-- ko foreach: placesVisited -->
+        					<div data-bind="text: $data"></div>
+    					<!-- /ko -->
+					</div>
 				</div>
 			</div>
 		</div>
+
+
 	</body>
 </html>

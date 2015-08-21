@@ -3,10 +3,11 @@
 */
 
 /* 
-	Initialize our array for holding markers
+	Initialize our array for holding markers and places
 */
 
 var markers = [];
+var places = [];
 
 /*
 	Helper function that takes in a google.maps.Marker object and adds it to markers
@@ -15,6 +16,13 @@ function addMarker(marker) {
 	markers.push(marker);
 }
 
+/* 
+	AddPlace object to places
+*/
+
+function addPlace(ImHavingTooMuchFun) {
+	places.push(ImHavingTooMuchFun);
+}
 /*
 	Helper function for resetting markers
 */
@@ -31,14 +39,29 @@ function createInfoWindow() {
 	return new google.maps.InfoWindow();
 }
 /* 
-	Function for creating a marker, for now it will just take in 1 string title, location object, and our map
+	Function for creating a marker, takes in place object and map and a boolean, 
+	When I get place objects from google manually, the place.geometry.location is not a google.maps.LatLng object
+	this throws an error if you try to create a marker setting its position just to an object with lat lng properties.
+	When I create a marker setting its position to place.geometry.location and the place is returned from googleSearch.getPlaces()
+	the method that gets called when someone enters a query and hits enter, it works just fine. #garbage
+
+	the boolean tells it whether or not to create a google.maps.latlng object for the position property of the marker
 */
-function createMarker(title, map, location) {
-	return new google.maps.Marker({
-		position: location,
-		title: title,
-		map: map
-	});
+function createMarker(place, map, boolean) {
+	if (!boolean) {
+		return new google.maps.Marker({
+			position: place.geometry.location,
+			title: place.formatted_address,
+			map: map
+		});
+	}
+	else if (boolean) {
+		return new google.maps.Marker({
+			position: new google.maps.LatLng(place.geometry.location.lat, place.geometry.location.lng),
+			title: place.formatted_address,
+			map: map
+		});
+	}
 }
 
 /*
@@ -90,6 +113,9 @@ function fitBounds(map, bounds) {
 	map.fitBounds(bounds);
 }
 
+function createLatLngObject(lat, lng) {
+	return new google.maps.LatLng(lat,lng);
+}
 function extendBounds(bounds, location) {
 	bounds.extend(location);
 }
@@ -160,7 +186,7 @@ function computeDistance(l1, l2) {
 	return (google.maps.geometry.spherical.computeDistanceBetween(l1, l2) / 1000).toFixed(2);
 }
 
-function initializeMarkers(bounds, infoWindow, map) {
+/*function initializeMarkers(bounds, infoWindow, map) {
 	var latlngObjects = [
 							{coords: new google.maps.LatLng(41.881832,-87.623177), city: "Chicago, IL"},
 							{coords: new google.maps.LatLng(42.168333,-87.851389), city: "Deerfield, IL"}, 
@@ -170,7 +196,7 @@ function initializeMarkers(bounds, infoWindow, map) {
 						];
 
 	latlngObjects.forEach(function(location) {
-		var marker = createMarker("",map,location.coords);
+		var marker = createMarker(location.city,map,location.coords);
 		addMarker(marker);
 		extendBounds(bounds,location.coords);
 		addMapListener(marker, 'click',function() {
@@ -180,5 +206,5 @@ function initializeMarkers(bounds, infoWindow, map) {
 	});
 
 	map.fitBounds(bounds);
-}
+}*/
 

@@ -13,3 +13,13 @@ function show(elementId) {
 function displayEqualsEmptyQuote(elementId) {
 	return document.getElementById(elementId).style.display == "";
 }
+
+function log(data) {
+	console.log(data);
+}
+
+function logArgs(dataArray) {
+	dataArray.forEach(function(d) {
+		log(d);
+	})
+}

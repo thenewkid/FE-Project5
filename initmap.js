@@ -48,12 +48,21 @@ function initializeMap() {
 	*/
 	addMapListener(googleMapSearch, 'places_changed', placesChangedCallBack)
 
-	initializeMarkers(bounds, infoWindow, map);
+	/* 
+		Udacity wants me to hardcode 5 places so this function is the function that does it
+	*/
+	initializePlaces(bounds, infoWindow, map);
+
+	/*
+		Now that the map and page are nice and loaded and my 5 places are initialized we can initalize the knockout viewmodel
+	*/
+	initializeKnockout();
 
 }
 
 /*
 	add the map listener to call our intializeMap function when the window loads
+	when the window loads, we also want to initialize our knockout view model
 */
 addDomListener(window, 'load', initializeMap);
 
@@ -67,6 +76,8 @@ addDomListener(window, 'load', initializeMap);
 	before we make it visible on the screen. Because its initialized to display none. When we check the 
 	display using javscript the display comes up as empty quote "".
 
+	If I set it to display: none using js instead of in the css, checking the style.display will come up "none". weird...
+
 */
 function tilesLoadedCallBack() {
 	if (displayEqualsEmptyQuote("google-search"))
@@ -78,5 +89,48 @@ function tilesLoadedCallBack() {
 */
 function placesChangedCallBack() {
 	
+}
+
+/*
+	init list of cities
+	for each city, send ajax request to google asking for the place object associated with the city
+	on ajax success create a marker, add marker, extendBounds, add place
+	set marker onclick to open up infoWindow
+*/
+function initializePlaces(bounds, infoWindow, map) {
+	var hardCodedCities = [
+							"Chicago,IL",
+							"Deerfield,IL",
+							"Evanston,IL",
+							"Highlandpark,IL",
+							"Skokie,IL"
+							];
+
+	hardCodedCities.forEach(function(city) {
+		getPlaceJson(city,map,bounds,infoWindow);
+	});
+}
+
+function getPlaceJson(city,map,bounds,infoWindow) {
+	var googJsonUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=city";
+	var readyUrl = replace(googJsonUrl, "city", city);
+
+	$.ajax({
+		url: readyUrl,
+		success: function(resultObject) {
+			var place = resultObject.results[0];
+			log(place);
+			var lat = place.geometry.location.lat;
+			var lng = place.geometry.location.lng;
+			var marker = createMarker(place, map, false);
+			addMarker(marker);
+			addMapListener(marker, 'click', function() {
+				infoWindow.setContent(place.formatted_address);
+				infoWindow.open(map, this);
+			})
+			extendBounds(bounds,createLatLngObject(lat,lng));
+			addPlace(place);
+		}
+	});
 }
 
