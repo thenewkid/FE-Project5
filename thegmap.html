@@ -34,6 +34,7 @@
 						<!-- ko foreach: placesVisited -->
         					<div class="place-div">
         						<p data-bind="text: $data.formatted_address"></p>
+        						<button class="btn btn-primary" data-bind="click: $root.clickPlace">Click Me Fool</button>
         					</div>
     					<!-- /ko -->
 					</div>

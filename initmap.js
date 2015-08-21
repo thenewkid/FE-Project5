@@ -48,12 +48,44 @@ function initializeMap() {
 		Add a listener to the google Search Box object to call searchFunction when someone types in a query
 
 	*/
-	addMapListener(googleMapSearch, 'places_changed', placesChangedCallBack)
+	addMapListener(googleMapSearch, 'places_changed', placesChangedCallBack);
 
 	/* 
 		Udacity wants me to hardcode 5 places so this function is the function that does it
 	*/
 	initializePlaces(bounds, infoWindow, map);
+
+
+	/* 
+	This function gets run every time the user types in a query and hits enter
+	*/
+	function placesChangedCallBack() {
+		var places = this.getPlaces();
+		if (places.length == 0)
+			return
+
+		places.forEach(function(place) {
+			var marker = createMarker(place,map);
+
+			addMarker(marker);
+			extendBounds(bounds,place.geometry.location);
+			fitBounds(map,bounds);
+
+			addMapListener(marker, 'click', function() {
+				infoWindow.setContent(place.name);
+				infoWindow.open(map, this);
+				this.setAnimation(google.maps.Animation.BOUNCE);
+
+				setTimeout(function() {
+					marker.setAnimation(null);
+				}, 3000);
+			});
+
+			if (!mapViewModel.contains(place.place_id))
+				addPlace(place);
+
+		})
+	}
 	
 }
 
@@ -79,13 +111,6 @@ addDomListener(window, 'load', initializeMap);
 function tilesLoadedCallBack() {
 	if (displayEqualsEmptyQuote("google-search"))
 		show("google-search");
-}
-
-/* 
-	This function gets run every time the user types in a query and hits enter
-*/
-function placesChangedCallBack() {
-	
 }
 
 /*
@@ -135,5 +160,9 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 			addPlace(place);
 		}
 	});
+}
+
+function bounceAssociatedMarker(data) {
+	log(data);
 }
 
