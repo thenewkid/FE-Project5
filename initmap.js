@@ -1,5 +1,7 @@
 function initializeMap() {
 
+	initializeKnockout();
+
 	var infoWindow = createInfoWindow();
 	/* 
 		call the create map method in my map_utils.js file
@@ -52,12 +54,7 @@ function initializeMap() {
 		Udacity wants me to hardcode 5 places so this function is the function that does it
 	*/
 	initializePlaces(bounds, infoWindow, map);
-
-	/*
-		Now that the map and page are nice and loaded and my 5 places are initialized we can initalize the knockout viewmodel
-	*/
-	initializeKnockout();
-
+	
 }
 
 /*
@@ -119,16 +116,17 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 		url: readyUrl,
 		success: function(resultObject) {
 			var place = resultObject.results[0];
-			log(place);
-			var lat = place.geometry.location.lat;
-			var lng = place.geometry.location.lng;
-			var marker = createMarker(place, map, false);
+			var marker = createMarker(place,map);
+
 			addMarker(marker);
+			extendBounds(bounds,place.geometry.location);
+			fitBounds(map,bounds);
+
 			addMapListener(marker, 'click', function() {
 				infoWindow.setContent(place.formatted_address);
 				infoWindow.open(map, this);
-			})
-			extendBounds(bounds,createLatLngObject(lat,lng));
+			});
+
 			addPlace(place);
 		}
 	});

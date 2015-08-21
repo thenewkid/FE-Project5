@@ -1,6 +1,6 @@
 function initializeKnockout() {
 	window.mapViewModel = {
-		placesVisited : ko.observableArray()
+		placesVisited : ko.observableArray(), 
 	};
 
 	ko.applyBindings(mapViewModel);

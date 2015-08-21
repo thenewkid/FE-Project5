@@ -17,11 +17,13 @@ function addMarker(marker) {
 }
 
 /* 
-	AddPlace object to places
+	AddPlace object to places and our observableArray();
 */
 
 function addPlace(ImHavingTooMuchFun) {
 	places.push(ImHavingTooMuchFun);
+	mapViewModel.placesVisited.push(ImHavingTooMuchFun);
+
 }
 /*
 	Helper function for resetting markers
@@ -38,30 +40,14 @@ function resetMarkers() {
 function createInfoWindow() {
 	return new google.maps.InfoWindow();
 }
-/* 
-	Function for creating a marker, takes in place object and map and a boolean, 
-	When I get place objects from google manually, the place.geometry.location is not a google.maps.LatLng object
-	this throws an error if you try to create a marker setting its position just to an object with lat lng properties.
-	When I create a marker setting its position to place.geometry.location and the place is returned from googleSearch.getPlaces()
-	the method that gets called when someone enters a query and hits enter, it works just fine. #garbage
 
-	the boolean tells it whether or not to create a google.maps.latlng object for the position property of the marker
-*/
-function createMarker(place, map, boolean) {
-	if (!boolean) {
-		return new google.maps.Marker({
-			position: place.geometry.location,
-			title: place.formatted_address,
-			map: map
-		});
-	}
-	else if (boolean) {
-		return new google.maps.Marker({
-			position: new google.maps.LatLng(place.geometry.location.lat, place.geometry.location.lng),
-			title: place.formatted_address,
-			map: map
-		});
-	}
+function createMarker(place, map) {
+	
+	return new google.maps.Marker({
+		position: place.geometry.location,
+		title: place.formatted_address,
+		map: map
+	});
 }
 
 /*
@@ -109,6 +95,7 @@ function createBounds(lat, lng) {
 	);
 
 }
+
 function fitBounds(map, bounds) {
 	map.fitBounds(bounds);
 }
@@ -117,7 +104,12 @@ function createLatLngObject(lat, lng) {
 	return new google.maps.LatLng(lat,lng);
 }
 function extendBounds(bounds, location) {
-	bounds.extend(location);
+	if (location instanceof google.maps.LatLng) {
+		bounds.extend(location);
+	}
+	else {
+		bounds.extend(createLatLngObject(location.lat, location.lng));
+	}
 }
 /* 
 	Adds a listener to the google map for example an onclick listener
