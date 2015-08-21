@@ -1,5 +1,6 @@
 function initializeMap() {
 
+	var infoWindow = createInfoWindow();
 	/* 
 		call the create map method in my map_utils.js file
 		this method takes an id of our html element to hold the map
@@ -46,6 +47,8 @@ function initializeMap() {
 
 	*/
 	addMapListener(googleMapSearch, 'places_changed', placesChangedCallBack)
+
+	initializeMarkers(bounds, infoWindow, map);
 
 }
 
