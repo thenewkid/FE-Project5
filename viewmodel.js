@@ -12,8 +12,11 @@ function initializeKnockout(service) {
 			markerMatch.setAnimation(google.maps.Animation.BOUNCE);
 			setTimeout(function() {
 				markerMatch.setAnimation(null);
-			}, 3000)
-		
+			}, 3000);
+		},
+		showReviewsModal : function(place, event) {
+			//for all these click functions I have, place arg is the same as this. log(this) == log(place). #Why
+			
 		},
 		requestDetails : function(place, event) {
 			if (!mapViewModel.containsPlaceDetails(place.place_id))

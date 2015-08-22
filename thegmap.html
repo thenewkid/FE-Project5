@@ -57,7 +57,11 @@
 
 										<span data-bind="if: $data.rating"><br>Rating <span data-bind="text: $data.rating"></span></span>
 
-										<span data-bind="if: $data.reviews"><br><a class="review-link">See Reviews</a></span>
+										<span data-bind="if: $data.user_ratings_total"><br>Number Of Users Who Rated <span data-bind="text: $data.user_ratings_total"></span></span>
+
+										<span data-bind="if: $data.price_level"><br>Price Level <span data-bind="text: $data.price_level"></span></span>
+
+										<span data-bind="if: $data.reviews"><br><a class="review-link" data-bind="click: $root.showReviewsModal">See Reviews</a></span>
 							
 								</div>
 							<!-- /ko -->
