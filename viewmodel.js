@@ -29,6 +29,16 @@ function initializeKnockout(service) {
 			});
 			return duplicateBoolean;
 		},
+		containsPlaceDetailsByName : function(name) {
+			var duplicateBoolean = false;
+			ko.utils.arrayForEach(this.additionalDetailsPlaces(), function(place) {
+				if (place.name == name) {
+					duplicateBoolean = true;
+					return;
+				}
+			});
+			return duplicateBoolean;
+		},
 		containsPlace : function(placeId) {
 			var duplicateBoolean = false;
 			ko.utils.arrayForEach(this.placesVisited(), function(place) {

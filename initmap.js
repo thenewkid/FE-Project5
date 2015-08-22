@@ -170,21 +170,23 @@ function requestPlaceDetails(place, service) {
 	var request = {
 		placeId : place.place_id
 	}
-	service.getDetails(request, function(place, status) {
+	service.getDetails(request, function(p, status) {
 
-		var detailsObject = {};
-
+		var noDataObject = {error : true}
+		log(p);
 		if (displayEqualsEmptyQuote("details") || displayNone("details")) {
 			show("details");
 		}
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
-			mapViewModel.addDetailsPlace(place);
+			mapViewModel.addDetailsPlace(p);
 		}
 
 		else {
-			/*if (!mapViewModel.containsDetailsPlaceName(place))
-			detailsObject.name = "Additional Data for " + place.name + " Is not available";
-			mapViewModel.addDetailsPlace(detailsObject);*/
+			if (mapViewModel.containsPlaceDetailsByName(place.name)) {}
+			else {
+				noDataObject.name = place.name;
+				mapViewModel.addDetailsPlace(detailsObject);
+			}
 		}
 
 		

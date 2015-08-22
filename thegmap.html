@@ -45,17 +45,31 @@
 				<div class="col-md-12 height-full">
 					<div id="details">
 						<!-- ko foreach: additionalDetailsPlaces -->
-							<div class="detail-place">
-								<span>Details For </span><span data-bind="text: $data.name"></span>
-								<p data-bind="text: $data.formatted_phone_number"></p>
-								<p data-bind="text: $data.international_phone_number"></p>
-								<p></p>
-							</div>
+							<!-- ko ifnot: $data.error -->
+								<div class="detail-place">
+									<span>Details For </span><span data-bind="text: $data.name"></span>
+
+										<span data-bind="if: $data.formatted_phone_number"><br>Phone Number <span data-bind="text: $data.formatted_phone_number"></span></span>
+									
+										<span data-bind="if: $data.international_phone_number"><br>International Phone Number <span data-bind="text: $data.international_phone_number"></span></span>
+
+										<span data-bind="if: $data.opening_hours"><br>Open Now <span data-bind="text: $data.opening_hours.open_now"></span></span>
+
+										<span data-bind="if: $data.rating"><br>Rating <span data-bind="text: $data.rating"></span></span>
+
+										<span data-bind="if: $data.reviews"><br><a class="review-link">See Reviews</a></span>
+							
+								</div>
+							<!-- /ko -->
+							<!-- ko if: $data.error -->
+								<div class="detail-place">
+									<span style="error">There is no additional Data for </span><span data-bind="text: $data.name"></span>
+								</div>
+							<!-- /ko -->
 						<!-- /ko -->
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 
