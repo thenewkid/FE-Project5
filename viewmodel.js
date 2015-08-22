@@ -4,6 +4,8 @@ function initializeKnockout(service) {
 		placesVisited : ko.observableArray(),
 		markers : ko.observableArray(),
 		additionalDetailsPlaces : ko.observableArray(),
+		currentPlaceNameForReviews : ko.observable(),
+		currentReviews : ko.observableArray(),
 		addMarker : function(marker) {this.markers.push(marker);},
 		addPlace : function(place) {this.placesVisited.push(place);},
 		addDetailsPlace : function(placeDetailsObject) {this.additionalDetailsPlaces.push(placeDetailsObject);},
@@ -16,7 +18,9 @@ function initializeKnockout(service) {
 		},
 		showReviewsModal : function(place, event) {
 			//for all these click functions I have, place arg is the same as this. log(this) == log(place). #Why
-			
+			mapViewModel.currentReviews(place.reviews);
+			mapViewModel.currentPlaceNameForReviews(place.name);
+			showModal("review-modal");
 		},
 		requestDetails : function(place, event) {
 			if (!mapViewModel.containsPlaceDetails(place.place_id))

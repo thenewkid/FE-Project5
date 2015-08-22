@@ -18,6 +18,13 @@ function displayEqualsEmptyQuote(elementId) {
 	return getElement(elementId).style.display == "";
 }
 
+function showModal(modalId) {
+	$("#" + modalId).modal();
+}
+
+function closeModal(modalId) {
+	$("#" + modalId).modal('hide');
+}
 function displayNone(elementId) {
 	return getElement(elementId).style.display == "none";
 }

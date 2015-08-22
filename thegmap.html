@@ -20,7 +20,7 @@
 		<div class="container height-full">
 			<div class="row">
 				<div class="col-md-12">
-					<h1>Best Google Maps Project Yet</h1>
+					<h1 style="color: white">Best Google Maps Project Yet</h1>
 				</div>
 			</div>
 			<div class="row height-75">
@@ -71,6 +71,31 @@
 								</div>
 							<!-- /ko -->
 						<!-- /ko -->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div id="review-modal" class="modal">
+						<div id="modal-content">
+							<div class="modal-header">
+								<span class="review-header">Reviews For <span data-bind="text: currentPlaceNameForReviews"></span></span>
+							</div>
+							<div class="modal-body">
+								<!-- ko foreach: currentReviews-->
+									<span>Author: <span data-bind="text: $data.author_name"></span></span>
+									<br>
+									<span>Rating: <span data-bind="text: $data.rating"></span></span>
+									<br>
+									<span>Review: <span data-bind="text: $data.text"></span></span>
+									<hr>
+
+								<!-- /ko -->
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-primary" onclick="closeModal('review-modal');">Close</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
