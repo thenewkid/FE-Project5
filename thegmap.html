@@ -34,12 +34,28 @@
 						<!-- ko foreach: placesVisited -->
         					<div class="place-div">
         						<p data-bind="text: $data.formatted_address"></p>
-        						<button class="btn btn-primary" data-bind="click: $root.clickPlace">Click Me Fool</button>
+        						<button class="btn btn-primary" data-bind="click: $root.requestDetails">Request Details</button>
+        						<button class="btn btn-primary" data-bind="click: $root.showMarker">Show Location On Map</button>
         					</div>
     					<!-- /ko -->
 					</div>
 				</div>
 			</div>
+			<div class="row height-75">
+				<div class="col-md-12 height-full">
+					<div id="details">
+						<!-- ko foreach: additionalDetailsPlaces -->
+							<div class="detail-place">
+								<span>Details For </span><span data-bind="text: $data.name"></span>
+								<p data-bind="text: $data.formatted_phone_number"></p>
+								<p data-bind="text: $data.international_phone_number"></p>
+								<p></p>
+							</div>
+						<!-- /ko -->
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 

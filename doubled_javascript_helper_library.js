@@ -10,10 +10,17 @@ function show(elementId) {
 	$("#" + elementId).show();
 }
 
-function displayEqualsEmptyQuote(elementId) {
-	return document.getElementById(elementId).style.display == "";
+function getElement(eid) {
+	return document.getElementById(eid);
 }
 
+function displayEqualsEmptyQuote(elementId) {
+	return getElement(elementId).style.display == "";
+}
+
+function displayNone(elementId) {
+	return getElement(elementId).style.display == "none";
+}
 function log(data) {
 	console.log(data);
 }

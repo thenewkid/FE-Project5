@@ -1,33 +1,6 @@
 /* 
 	This is a basic framework for using google maps
 */
-
-/* 
-	Initialize our array for holding markers and places
-*/
-
-var markers = [];
-var places = [];
-
-/*
-	Helper function that takes in a google.maps.Marker object and adds it to markers
-*/
-function addMarker(marker) {
-	markers.push(marker);
-}
-
-/* 
-	AddPlace object to places and our observableArray();
-*/
-
-function addPlace(ImHavingTooMuchFun) {
-	places.push(ImHavingTooMuchFun);
-	mapViewModel.placesVisited.push(ImHavingTooMuchFun);
-
-}
-/*
-	Helper function for resetting markers
-*/
 function resetMarkers() {
 	if (markers.length > 0) {
 		markers.forEach(function(marker) {

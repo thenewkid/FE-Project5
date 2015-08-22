@@ -1,6 +1,5 @@
 function initializeMap() {
 
-	initializeKnockout();
 
 	var infoWindow = createInfoWindow();
 	/* 
@@ -16,7 +15,7 @@ function initializeMap() {
 		these methods return additional info about a certain place and retrieve places within a certain radius
 	*/
 	var service = createPlacesService(map);
-
+	initializeKnockout(service);
 	/* 
 		initialize our bounds object to be chicago, Il
 	*/
@@ -57,7 +56,10 @@ function initializeMap() {
 
 
 	/* 
-	This function gets run every time the user types in a query and hits enter
+		This function gets run every time the user types in a query and hits enter
+		I am setting the markers title to be the formatted_address of the place object its associated with
+		Before I add a marker I have to make sure that a marker with the same title -> place.formatted_adddress
+		is not already in my mapviewModel.markers
 	*/
 	function placesChangedCallBack() {
 		var places = this.getPlaces();
@@ -65,24 +67,26 @@ function initializeMap() {
 			return
 
 		places.forEach(function(place) {
-			var marker = createMarker(place,map);
 
-			addMarker(marker);
-			extendBounds(bounds,place.geometry.location);
-			fitBounds(map,bounds);
+			if (!mapViewModel.containsMarker(place.formatted_address)) {
+				log("viewmodel does not contain marker with title " + place.formatted_address);
+				var marker = createMarker(place,map);
+				mapViewModel.addMarker(marker);
+				extendBounds(bounds,place.geometry.location);
+				fitBounds(map,bounds);
 
-			addMapListener(marker, 'click', function() {
-				infoWindow.setContent(place.name);
-				infoWindow.open(map, this);
-				this.setAnimation(google.maps.Animation.BOUNCE);
+				addMapListener(marker, 'click', function() {
+					infoWindow.setContent(place.name);
+					infoWindow.open(map, this);
+					this.setAnimation(google.maps.Animation.BOUNCE);
 
-				setTimeout(function() {
-					marker.setAnimation(null);
-				}, 3000);
-			});
+					setTimeout(function() {
+						marker.setAnimation(null);
+					}, 3000);
+				});
 
-			if (!mapViewModel.contains(place.place_id))
-				addPlace(place);
+				mapViewModel.addPlace(place);
+			}
 
 		})
 	}
@@ -120,7 +124,7 @@ function tilesLoadedCallBack() {
 	set marker onclick to open up infoWindow
 */
 function initializePlaces(bounds, infoWindow, map) {
-	var hardCodedCities = [
+	var hardCodedCities = [ 
 							"Chicago,IL",
 							"Deerfield,IL",
 							"Evanston,IL",
@@ -143,7 +147,7 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 			var place = resultObject.results[0];
 			var marker = createMarker(place,map);
 
-			addMarker(marker);
+			mapViewModel.addMarker(marker);
 			extendBounds(bounds,place.geometry.location);
 			fitBounds(map,bounds);
 
@@ -157,12 +161,32 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 				}, 3000);
 			});
 
-			addPlace(place);
+			mapViewModel.addPlace(place);
 		}
 	});
 }
 
-function bounceAssociatedMarker(data) {
-	log(data);
-}
+function requestPlaceDetails(place, service) {
+	var request = {
+		placeId : place.place_id
+	}
+	service.getDetails(request, function(place, status) {
 
+		var detailsObject = {};
+
+		if (displayEqualsEmptyQuote("details") || displayNone("details")) {
+			show("details");
+		}
+		if (status == google.maps.places.PlacesServiceStatus.OK) {
+			mapViewModel.addDetailsPlace(place);
+		}
+
+		else {
+			/*if (!mapViewModel.containsDetailsPlaceName(place))
+			detailsObject.name = "Additional Data for " + place.name + " Is not available";
+			mapViewModel.addDetailsPlace(detailsObject);*/
+		}
+
+		
+	})
+}
