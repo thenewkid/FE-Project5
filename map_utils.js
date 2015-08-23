@@ -139,15 +139,26 @@ function createGoogleSearch(searchElementId, map) {
  and a service object that contains the method search by radius
 */
 
-function nearbySearchRadius(place, cb, service) {
+function nearbySearchRadius(place, cb, service, radius) {
 	var request = {
     	location: place.geometry.location,
-    	radius: '1600',
+    	radius: (radius*1600).toString(),
     	types: []
   	};
 
   	service.nearbySearch(request, cb);
 }
+
+function nearbySearchCallBack(results, status, pagination) {
+		
+	if (status == google.maps.places.PlacesServiceStatus.OK) {
+		for (var i = 0; i < results.length; i++) {
+			log(results[i]);
+		}
+		if (pagination.hasNextPage)
+			pagination.nextPage();
+		}
+	}
 
 function computeDistance(l1, l2) {
 	return (google.maps.geometry.spherical.computeDistanceBetween(l1, l2) / 1000).toFixed(2);

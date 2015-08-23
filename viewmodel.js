@@ -127,7 +127,7 @@ function initializeKnockout(service) {
 				if (displayEqualsEmptyQuote("nearby-search-results"))
 					show("nearby-search-results");
 
-				
+				nearbySearchRadius(mapViewModel.currentPlaceForNearbySearch(), nearbySearchCallBack, service, mapViewModel.currentRadius());
 
 				closeModal("search-nearby-modal");
 			}
