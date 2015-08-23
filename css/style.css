@@ -1,0 +1,101 @@
+html {
+	height : 100%;
+	width : 100%;
+}
+
+body {
+	height : 100%;
+	width : 100%;
+	background : #080016;
+}
+
+#map-canvas {
+	margin : 0 auto;
+	width : 100%;
+	height : 100%;
+}
+
+#map-visited-list {
+	border : 2px solid silver;
+	overflow-y : auto;
+}
+
+#google-search {
+	width : 50%;
+	margin-top : 2%;
+	font-size : 130%;
+	background : linear-gradient(200deg, #000514, #0066CC);
+	border : 1px groove black;
+	color : white;
+	display: none;
+}
+
+#details {
+	display : none;
+	width : 50%;
+	height : 100%;
+	border : 1px solid white;
+	margin : 0 auto;
+	margin-top : 3%;
+	overflow-y : auto;
+}
+
+.error {
+	color : red;
+	font-style : italic;
+}
+
+.detail-place {
+	text-align : center;
+	border : 1px groove white;
+	color : white;
+}
+
+.no-display {
+	display : none;
+}
+
+.review-link {
+	color : #9696F2;
+}
+
+.review-link:hover {
+	color : teal;
+	cursor : pointer;
+}
+
+.height-75 {
+	height : 75%;
+}
+
+.height-full {
+	height : 100%;
+}
+
+.width-full {
+	width : 100%;
+}
+
+.place-div {
+	padding : 2%;
+	border : 1px groove white;
+	color : white;
+}
+
+.place-div:hover {
+	color : #080016;
+	background-color : white;
+	border-color : #080016;
+}
+
+.review-header {
+	font-size : 175%;
+}
+
+#review-modal {
+	margin : 0 auto;
+	width : 50%;
+	height : 40%;
+	margin-top : 10%;
+	background-color : silver;
+}
