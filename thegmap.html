@@ -42,7 +42,7 @@
     					<!-- /ko -->
 					</div>
 				</div>
-				<div class="col-md-12 col-sm-12 width-full height-full">
+				<div class="col-md-6">
 					<div id="details" class="width-full">
 						<!-- ko foreach: additionalDetailsPlaces -->
 							<!-- ko ifnot: $data.error -->
@@ -61,7 +61,7 @@
 
 										<span data-bind="if: $data.price_level"><br>Price Level <span data-bind="text: $data.price_level"></span></span>
 
-										<span data-bind="if: $data.reviews"><br><a class="review-link" data-bind="click: $root.showReviewsModal">See Reviews</a></span>
+										<span data-bind="if: $data.reviews"><br><a class="review-link" data-bind="click: $root.showReviewsModal">See Reviews</a> Or <a class="review-link" data-bind="click: $root.searchNearby">Search Nearby</a></span>
 							
 								</div>
 							<!-- /ko -->
@@ -71,6 +71,16 @@
 								</div>
 							<!-- /ko -->
 						<!-- /ko -->
+					</div>
+				</div>
+				<div class="col-md-6" style="margin-top: 5%">
+					<div id="nearby-search-results">
+						<span>Nearby Search Results Within 
+							<span data-bind="text: currentRadius"></span>
+							<span> Mile Radius Of </span> 
+							<span data-bind="text: currentPlaceNameForNearbySearch"></span>
+						<span>
+							<!-- ko foreach: 
 					</div>
 				</div>
 			</div>
@@ -95,6 +105,22 @@
 							<div class="modal-footer">
 								<button class="btn btn-primary" onclick="closeModal('review-modal');">Close</button>
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="search-nearby-modal" class="modal">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h2>Welcome To The Nearby Search</h2>
+						</div>
+						<div class="modal-body">
+							<input id="radius" type="number" min="1" max="31" placeholder="Enter radius in miles" data-bind="textInput: currentRadius">
+							<span style="color: red; font-style: italic; margin-left: 2%" data-bind="text: radiusError"></span>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" style="margin-right: 90%" data-bind="click: $root.loadNearbySearchResults">Get Results</button>
 						</div>
 					</div>
 				</div>

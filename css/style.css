@@ -32,12 +32,26 @@ body {
 
 #details {
 	display : none;
-	width : 50%;
 	height : 100%;
 	border : 1px solid white;
-	margin : 0 auto;
 	margin-top : 3%;
 	overflow-y : auto;
+}
+
+#nearby-search-results {
+	display : none;
+	border : 1px solid white;
+	color : white;
+}
+
+#search-nearby-modal {
+	width : 50%;
+	margin : 0 auto;
+}
+
+#radius {
+	text-align : center;
+	width : 30%;
 }
 
 .error {

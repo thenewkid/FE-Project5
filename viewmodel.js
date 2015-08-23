@@ -6,6 +6,11 @@ function initializeKnockout(service) {
 		additionalDetailsPlaces : ko.observableArray(),
 		currentPlaceNameForReviews : ko.observable(),
 		currentReviews : ko.observableArray(),
+		currentRadius : ko.observable(),
+		radiusError : ko.observable(),
+		currentPlaceForNearbySearch : ko.observable(),
+		currentPlaceNameForNearbySearch : ko.observable(),
+		nearbySearchResults : ko.observableArray(),
 		addMarker : function(marker) {this.markers.push(marker);},
 		addPlace : function(place) {this.placesVisited.push(place);},
 		addDetailsPlace : function(placeDetailsObject) {this.additionalDetailsPlaces.push(placeDetailsObject);},
@@ -106,9 +111,29 @@ function initializeKnockout(service) {
 			 mapViewModel.placesVisited.removeAll();
 			 ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
 			 	mapViewModel.displayMarkerDeletion(marker);
-			 })
+			 });
 			
+		},
+		searchNearby : function(place, event) {
+			showModal("search-nearby-modal");
+			mapViewModel.currentPlaceForNearbySearch(place);
+			mapViewModel.currentPlaceNameForNearbySearch(place.name);
+		},
+		loadNearbySearchResults : function() {
+			var cr = parseInt(mapViewModel.currentRadius());
+			if (isNaN(cr))
+				mapViewModel.radiusError("A number is required");
+			else {
+				if (displayEqualsEmptyQuote("nearby-search-results"))
+					show("nearby-search-results");
+
+				
+
+				closeModal("search-nearby-modal");
+			}
+				
 		}
+
 	};
 
 	ko.applyBindings(mapViewModel);
