@@ -70,6 +70,26 @@ function initializeKnockout(service) {
 			return mkr = ko.utils.arrayFirst(this.markers(), function(marker) {
 				return marker.title == title;
 			});
+		},
+		removeMarker : function(mkr) {
+			this.markers.remove(mkr);
+		},
+		removePlaceVisited : function(place) {
+			this.placesVisited.remove(place);
+		},
+		deleteListing : function(place, event) {
+			//remove the place and remove the marker, if I didn't remove the marker then we wouldnt be able to add the place object back
+			//I also want to change the color of marker to green and set its anmation to bounce for 3 seconds and then remove it
+			//so easy psh
+			mapViewModel.removePlaceVisited(place);
+			var marker = mapViewModel.findMarker(place.formatted_address);
+			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+			setTimeout(function() {
+				marker.setMap(null);
+				mapViewModel.removeMarker(marker);
+			}, 3000)
+
 		}
 	};
 
