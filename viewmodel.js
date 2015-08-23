@@ -83,13 +83,31 @@ function initializeKnockout(service) {
 			//so easy psh
 			mapViewModel.removePlaceVisited(place);
 			var marker = mapViewModel.findMarker(place.formatted_address);
+			mapViewModel.displayMarkerDeletion(marker);
+
+		},
+		displayMarkerDeletion : function(marker) {
 			marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
 			marker.setAnimation(google.maps.Animation.BOUNCE);
 			setTimeout(function() {
 				marker.setMap(null);
 				mapViewModel.removeMarker(marker);
 			}, 3000)
+		},
+		deleteAllListings : function() {
+			/* a sane person might think, oh look at that deleteListing function,
+				how about we iterate over places visited and call the deleteListing function on each place
+				BAD BAD BAD IDEA BRO, in all programming languages, weird things start to happen when you remove an elemtn from a list
+				as you iterate over the list, in java this is called ConcurrentModifcationException
+				anyways I have a better solution, call the removeAll on placesVisited, then iterate over our markers and call
+				displayMarkerDeletion. #peace
+			 */
 
+			 mapViewModel.placesVisited.removeAll();
+			 ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
+			 	mapViewModel.displayMarkerDeletion(marker);
+			 })
+			
 		}
 	};
 
