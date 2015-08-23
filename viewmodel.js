@@ -122,6 +122,7 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 				ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
 					mapViewModel.displayMarkerDeletion(marker);
 				});
+				hide("nearby-search-results");
 			}
 			
 		},
@@ -142,7 +143,7 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			if (isNaN(cr))
 				mapViewModel.radiusError("A number is required");
 			else {
-				if (displayEqualsEmptyQuote("nearby-search-results"))
+				if (displayEqualsEmptyQuote("nearby-search-results") || displayNone("nearby-search-results"))
 					show("nearby-search-results");
 
 				else if (mapViewModel.nearbySearchResults().length > 0) {
