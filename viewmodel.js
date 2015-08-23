@@ -1,6 +1,7 @@
 function initializeKnockout(service, bounds, infoWindow, map) {
 	window.mapViewModel = {
-		self : this,
+
+		//places visited
 		placesVisited : ko.observableArray(),
 		markers : ko.observableArray(),
 		additionalDetailsPlaces : ko.observableArray(),
@@ -115,6 +116,9 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			 //0f zero before They get deleted
 			 if (mapViewModel.placesVisited().length > 0) {
 				mapViewModel.placesVisited.removeAll();
+				mapViewModel.additionalDetailsPlaces.removeAll();
+				mapViewModel.nearbyDetailsSearchResults.removeAll();
+				mapViewModel.nearbySearchResults.removeAll();
 				ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
 					mapViewModel.displayMarkerDeletion(marker);
 				});
