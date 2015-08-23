@@ -85,6 +85,10 @@
 							<div id="nbsr">
 								<p data-bind="text: $data.name"></p>
         						<p data-bind="text: $data.formatted_address"></p>
+        						<p>Distance From 
+        							<span data-bind="text: $root.currentPlaceNameForNearbySearch"> </span>
+        							<span data-bind="text: $data.distance"</span>
+        						</p>
         						<button class="btn btn-primary" data-bind="click: $root.requestNearbyDetails">Request Details</button>
         						<button class="btn btn-primary" data-bind="click: $root.showMarker">Show Location On Map</button>
 							</div>

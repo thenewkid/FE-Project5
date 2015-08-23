@@ -153,10 +153,11 @@ function nearbySearchRadius(place, service, radius, bounds, infoWindow, map) {
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
 			for (var i = 0; i < results.length; i++) {
 
-				var place = results[i];
-				service.getDetails({placeId:place.place_id}, function(p, s) {
+				var plce = results[i];
+				service.getDetails({placeId:plce.place_id}, function(p, s) {
 					if (s == google.maps.places.PlacesServiceStatus.OK) {
 						addMarkerFitMap(p, map, bounds, infoWindow, mapViewModel);
+						p.distance = computeDistance(place.geometry.location, p.geometry.location);
 						mapViewModel.addNearbySearchResult(p);
 						mapViewModel.addNearbyDetailsPlace(p);
 					}
