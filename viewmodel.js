@@ -1,7 +1,5 @@
 function initializeKnockout(service, bounds, infoWindow, map) {
 	window.mapViewModel = {
-
-		//places visited
 		placesVisited : ko.observableArray(),
 		markers : ko.observableArray(),
 		additionalDetailsPlaces : ko.observableArray(),
