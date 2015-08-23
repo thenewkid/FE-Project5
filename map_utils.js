@@ -139,31 +139,65 @@ function createGoogleSearch(searchElementId, map) {
  and a service object that contains the method search by radius
 */
 
-function nearbySearchRadius(place, cb, service, radius) {
+function nearbySearchRadius(place, service, radius, bounds, infoWindow, map) {
 	var request = {
     	location: place.geometry.location,
     	radius: (radius*1600).toString(),
     	types: []
   	};
 
-  	service.nearbySearch(request, cb);
-}
+  	service.nearbySearch(request, nearbySearchCallBack);
 
-function nearbySearchCallBack(results, status, pagination) {
+  	function nearbySearchCallBack(results, status, pagination) {
 		
-	if (status == google.maps.places.PlacesServiceStatus.OK) {
-		for (var i = 0; i < results.length; i++) {
-			log(results[i]);
-		}
-		if (pagination.hasNextPage)
-			pagination.nextPage();
+		if (status == google.maps.places.PlacesServiceStatus.OK) {
+			for (var i = 0; i < results.length; i++) {
+
+				var place = results[i];
+				service.getDetails({placeId:place.place_id}, function(p, s) {
+					if (s == google.maps.places.PlacesServiceStatus.OK) {
+						addMarkerFitMap(p, map, bounds, infoWindow, mapViewModel);
+						mapViewModel.addNearbySearchResult(p);
+						mapViewModel.addNearbyDetailsPlace(p);
+					}
+				});
+			}
+			if (pagination.hasNextPage)
+				pagination.nextPage();
 		}
 	}
+}
 
 function computeDistance(l1, l2) {
 	return (google.maps.geometry.spherical.computeDistanceBetween(l1, l2) / 1000).toFixed(2);
 }
 
+function addMarkerFitMap(place, map, bounds, infoWindow, viewModelName) {
+
+	var marker = createMarker(place,map);
+	viewModelName.addMarker(marker);
+	extendBounds(bounds,place.geometry.location);
+	fitBounds(map,bounds);
+
+	addMapListener(marker, 'click', function() {
+		if (place.name !== undefined && place.formatted_address !== undefined)
+			infoWindow.setContent(place.name + "<br>" + place.formatted_address);
+
+		else {
+			if (place.name === undefined)
+				infoWindow.setContent(place.formatted_address);
+			else
+				infoWindow.setContent(place.name);
+		}
+
+		infoWindow.open(map, this);
+		this.setAnimation(google.maps.Animation.BOUNCE);
+
+		setTimeout(function() {
+			marker.setAnimation(null);
+		}, 3000);
+	});
+}
 /*function initializeMarkers(bounds, infoWindow, map) {
 	var latlngObjects = [
 							{coords: new google.maps.LatLng(41.881832,-87.623177), city: "Chicago, IL"},

@@ -81,6 +81,14 @@
 							<span> Mile Radius Of </span> 
 							<span data-bind="text: currentPlaceNameForNearbySearch"></span>
 						</span>
+						<!-- ko foreach: nearbySearchResults -->
+							<div id="nbsr">
+								<p data-bind="text: $data.name"></p>
+        						<p data-bind="text: $data.formatted_address"></p>
+        						<button class="btn btn-primary" data-bind="click: $root.requestNearbyDetails">Request Details</button>
+        						<button class="btn btn-primary" data-bind="click: $root.showMarker">Show Location On Map</button>
+							</div>
+						<!-- /ko -->
 					</div>
 				</div>
 			</div>

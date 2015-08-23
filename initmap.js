@@ -18,12 +18,13 @@ function initializeMap() {
 		these methods return additional info about a certain place and retrieve places within a certain radius
 	*/
 	var service = createPlacesService(map);
-	initializeKnockout(service);
+
 	/* 
 		initialize our bounds object to be chicago, Il
 	*/
 	var bounds = createBounds(41.881832,-87.623177);
 
+	initializeKnockout(service, bounds, infoWindow, map);
 	/* 
 		googleMapSearch is an object that holds the input box where users where type in their map queries
 		createGoogleSearch takes in an id of an input element and the map object and returns a google.maps.places.SearchBox
@@ -73,27 +74,12 @@ function initializeMap() {
 
 			if (!mapViewModel.containsMarker(place.formatted_address)) {
 				log("viewmodel does not contain marker with title " + place.formatted_address);
-				var marker = createMarker(place,map);
-				mapViewModel.addMarker(marker);
-				extendBounds(bounds,place.geometry.location);
-				fitBounds(map,bounds);
-
-				addMapListener(marker, 'click', function() {
-					infoWindow.setContent(place.name);
-					infoWindow.open(map, this);
-					this.setAnimation(google.maps.Animation.BOUNCE);
-
-					setTimeout(function() {
-						marker.setAnimation(null);
-					}, 3000);
-				});
-
+				addMarkerFitMap(place, map, bounds, infoWindow, mapViewModel);
 				mapViewModel.addPlace(place);
 			}
 
 		})
 	}
-	
 }
 
 /*
@@ -148,22 +134,7 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 		url: readyUrl,
 		success: function(resultObject) {
 			var place = resultObject.results[0];
-			var marker = createMarker(place,map);
-
-			mapViewModel.addMarker(marker);
-			extendBounds(bounds,place.geometry.location);
-			fitBounds(map,bounds);
-
-			addMapListener(marker, 'click', function() {
-				infoWindow.setContent(place.formatted_address);
-				infoWindow.open(map, this);
-				this.setAnimation(google.maps.Animation.BOUNCE);
-
-				setTimeout(function() {
-					marker.setAnimation(null);
-				}, 3000);
-			});
-
+			addMarkerFitMap(place,map,bounds,infoWindow,mapViewModel);
 			mapViewModel.addPlace(place);
 		}
 	});

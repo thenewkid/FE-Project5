@@ -1,4 +1,4 @@
-function initializeKnockout(service) {
+function initializeKnockout(service, bounds, infoWindow, map) {
 	window.mapViewModel = {
 		self : this,
 		placesVisited : ko.observableArray(),
@@ -11,8 +11,11 @@ function initializeKnockout(service) {
 		currentPlaceForNearbySearch : ko.observable(),
 		currentPlaceNameForNearbySearch : ko.observable(),
 		nearbySearchResults : ko.observableArray(),
+		nearbyDetailsSearchResults : ko.observableArray(),
+		addNearbyDetailsPlace : function(doit) {this.nearbyDetailsSearchResults.push(doit);},
 		addMarker : function(marker) {this.markers.push(marker);},
 		addPlace : function(place) {this.placesVisited.push(place);},
+		addNearbySearchResult : function(result) {this.nearbySearchResults.push(result);},
 		addDetailsPlace : function(placeDetailsObject) {this.additionalDetailsPlaces.push(placeDetailsObject);},
 		showMarker : function(place, event) {
 			var markerMatch = mapViewModel.findMarker(place.formatted_address);
@@ -108,11 +111,22 @@ function initializeKnockout(service) {
 				displayMarkerDeletion. #peace
 			 */
 
-			 mapViewModel.placesVisited.removeAll();
-			 ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
-			 	mapViewModel.displayMarkerDeletion(marker);
-			 });
+			 //we dont want to run any unecessary code so make sure at least placesVisited doesnt have a length
+			 //0f zero before They get deleted
+			 if (mapViewModel.placesVisited().length > 0) {
+				mapViewModel.placesVisited.removeAll();
+				ko.utils.arrayForEach(mapViewModel.markers(), function(marker) {
+					mapViewModel.displayMarkerDeletion(marker);
+				});
+			}
 			
+		},
+		requestNearbyDetails : function(place) {
+			var match = ko.utils.arrayFirst(mapViewModel.nearbyDetailsSearchResults(), function(p) {
+				return p.place_id == place.place_id
+			});
+
+			mapViewModel.addDetailsPlace(match);
 		},
 		searchNearby : function(place, event) {
 			showModal("search-nearby-modal");
@@ -127,7 +141,11 @@ function initializeKnockout(service) {
 				if (displayEqualsEmptyQuote("nearby-search-results"))
 					show("nearby-search-results");
 
-				nearbySearchRadius(mapViewModel.currentPlaceForNearbySearch(), nearbySearchCallBack, service, mapViewModel.currentRadius());
+				else if (mapViewModel.nearbySearchResults().length > 0) {
+					mapViewModel.nearbySearchResults.removeAll();
+				}
+
+				nearbySearchRadius(mapViewModel.currentPlaceForNearbySearch(), service, mapViewModel.currentRadius(), bounds, infoWindow, map);
 
 				closeModal("search-nearby-modal");
 			}

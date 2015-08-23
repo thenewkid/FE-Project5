@@ -31,6 +31,7 @@ body {
 }
 
 #details {
+	height: 100%;
 	display : none;
 	height : 100%;
 	border : 1px solid white;
@@ -40,8 +41,15 @@ body {
 
 #nearby-search-results {
 	display : none;
-	border : 1px solid white;
 	color : white;
+}
+
+#nbsr {
+	overflow-y: auto;
+	color : white;
+	border : 1px solid white;
+	text-align : center;
+	height : 100%;
 }
 
 #search-nearby-modal {
