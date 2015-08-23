@@ -1,5 +1,8 @@
 function initializeMap() {
 
+	/* 
+		Get our infowindow
+	*/
 
 	var infoWindow = createInfoWindow();
 	/* 
