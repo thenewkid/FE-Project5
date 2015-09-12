@@ -1,5 +1,6 @@
 function initializeMap() {
 
+	//var yelp = initYelp();
 	/* 
 		Get our infowindow
 	*/
@@ -56,7 +57,7 @@ function initializeMap() {
 	/* 
 		Udacity wants me to hardcode 5 places so this function is the function that does it
 	*/
-	initializePlaces(bounds, infoWindow, map);
+	initializePlaces(bounds, infoWindow, map,service);
 
 
 	/* 
@@ -67,8 +68,8 @@ function initializeMap() {
 	*/
 	function placesChangedCallBack() {
 		var places = this.getPlaces();
-		if (places.length == 0)
-			return
+		if (places.length === 0)
+			return;
 
 		places.forEach(function(place) {
 
@@ -78,7 +79,7 @@ function initializeMap() {
 				mapViewModel.addPlace(place);
 			}
 
-		})
+		});
 	}
 }
 
@@ -112,21 +113,21 @@ function tilesLoadedCallBack() {
 	on ajax success create a marker, add marker, extendBounds, add place
 	set marker onclick to open up infoWindow
 */
-function initializePlaces(bounds, infoWindow, map) {
+function initializePlaces(bounds, infoWindow, map, service) {
 	var hardCodedCities = [ 
 							"Chicago,IL",
 							"Deerfield,IL",
 							"Evanston,IL",
 							"Highlandpark,IL",
 							"Skokie,IL"
-							];
+						];
 
 	hardCodedCities.forEach(function(city) {
-		getPlaceJson(city,map,bounds,infoWindow);
+		getPlaceJson(city,map,bounds,infoWindow,service);
 	});
 }
 
-function getPlaceJson(city,map,bounds,infoWindow) {
+function getPlaceJson(city,map,bounds,infoWindow,service) {
 	var googJsonUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=city";
 	var readyUrl = replace(googJsonUrl, "city", city);
 
@@ -134,19 +135,30 @@ function getPlaceJson(city,map,bounds,infoWindow) {
 		url: readyUrl,
 		success: function(resultObject) {
 			var place = resultObject.results[0];
-			addMarkerFitMap(place,map,bounds,infoWindow,mapViewModel);
-			mapViewModel.addPlace(place);
+			service.getDetails({placeId:place.place_id}, function(p, s) {
+				if (s == google.maps.places.PlacesServiceStatus.OK) {
+					addMarkerFitMap(p,map,bounds,infoWindow,mapViewModel);
+					mapViewModel.addPlace(p);
+				}
+			});
+		},
+		error: function(e) {
+			log(e);
+		},
+		fail: function(f) {
+			log(f);
 		}
 	});
 }
 
+
 function requestPlaceDetails(place, service) {
 	var request = {
 		placeId : place.place_id
-	}
+	};
 	service.getDetails(request, function(p, status) {
 
-		var noDataObject = {error : true}
+		var noDataObject = {error : true};
 		log(p);
 		if (displayEqualsEmptyQuote("details") || displayNone("details")) {
 			show("details");
@@ -164,5 +176,28 @@ function requestPlaceDetails(place, service) {
 		}
 
 		
-	})
+	});
 }
+
+function foursquare(latlng, query) {
+	var u = "https://api.foursquare.com/v2/venues/search?client_id=IPSOH0LAWD51GZKGKSF25UGYZZ15ZC4CBDROUO4UWA4OSZLZ&client_secret=3S23FBLSWIVJHRQK0GRJBFQCJOLT1DLI32PJOP4RYXWVVUUT&v=20130815&ll=latlng&query=searchq";
+	var replacementStrings = ["latlng", "searchq"];
+	var userDefinedSearch = replaceAll(u, replacementStrings, [latlng, query]);
+
+  	$.ajax({
+  		url: userDefinedSearch, 
+  		success:function(e) {log(e);},
+  		fail: function(e) {
+  			log(e);
+  		},
+  		error: function(e) {
+  			log(e);
+  		}
+  	});
+}
+/* 
+Client id
+IPSOH0LAWD51GZKGKSF25UGYZZ15ZC4CBDROUO4UWA4OSZLZ
+Client secret
+3S23FBLSWIVJHRQK0GRJBFQCJOLT1DLI32PJOP4RYXWVVUUT
+*/

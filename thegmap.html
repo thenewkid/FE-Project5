@@ -4,6 +4,8 @@
 		<title>I'm a Map</title>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+        <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
 		<script src="doubled_javascript_helper_library.js"></script>
 		<script src="map_utils.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry"></script>
@@ -30,14 +32,25 @@
 				</div>
 				<div class="col-md-6 height-full">
 					<button class="btn btn-danger" data-bind="click: $root.deleteAllListings">Delete All</button>
+					<input type="text" oninput="handleCurrentSearch(this)" placeholder="Search Place">
+					<span style="color: white" data-bind="text: numberOfMatches"></span>
+					
 					<div id="map-visited-list" class="width-full height-full">
 						<!-- ko foreach: placesVisited -->
         					<div class="place-div">
-        						<p data-bind="text: $data.name"></p>
-        						<p data-bind="text: $data.formatted_address"></p>
-        						<button class="btn btn-primary" data-bind="click: $root.requestDetails">Request Details</button>
-        						<button class="btn btn-primary" data-bind="click: $root.showMarker">Show Location On Map</button>
-        						<button class="btn btn-primary" data-bind="click: $root.deleteListing">Delete This Listing</button>
+        						<div>
+	        						<p data-bind="text: $data.name"></p>
+	        						<p data-bind="text: $data.formatted_address"></p>
+	        					</div>
+	        					<div class="text-center">
+	        						<input type="text" data-bind="value: $data.searchValue" placeholder="Search This Area">
+	        						<button class="btn btn-info" data-bind="click: $root.searchFoursquare">Show Results</button>
+	        					</div>
+	        					<div style="margin-top: 2%">
+	        						<button class="btn btn-primary" data-bind="click: $root.requestDetails">Request Details</button>
+	        						<button class="btn btn-primary" data-bind="click: $root.showMarker">Show Location On Map</button>
+	        						<button class="btn btn-primary" data-bind="click: $root.deleteListing">Delete This Listing</button>
+        						</div>
         					</div>
     					<!-- /ko -->
 					</div>

@@ -6,11 +6,13 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 		currentPlaceNameForReviews : ko.observable(),
 		currentReviews : ko.observableArray(),
 		currentRadius : ko.observable(),
+		currentSearch : ko.observable(),
 		radiusError : ko.observable(),
 		currentPlaceForNearbySearch : ko.observable(),
 		currentPlaceNameForNearbySearch : ko.observable(),
 		nearbySearchResults : ko.observableArray(),
 		nearbyDetailsSearchResults : ko.observableArray(),
+		numberOfMatches : ko.observableArray(),
 		addNearbyDetailsPlace : function(doit) {this.nearbyDetailsSearchResults.push(doit);},
 		addMarker : function(marker) {this.markers.push(marker);},
 		addPlace : function(place) {this.placesVisited.push(place);},
@@ -22,6 +24,19 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			setTimeout(function() {
 				markerMatch.setAnimation(null);
 			}, 3000);
+		},
+		searchFoursquare: function(data) {
+			if (data.searchValue === undefined)
+				alert("you must enter a value mannnn");
+			else {
+				var locationObject = data.geometry.location;
+				var lat = locationObject.G;
+				var lng = locationObject.K;
+				var llCoordsString = lat +','+lng;
+				var searchQuery = data.searchValue;
+
+				foursquare(llCoordsString, searchQuery);
+			}
 		},
 		showReviewsModal : function(place, event) {
 			//for all these click functions I have, place arg is the same as this. log(this) == log(place). #Why
@@ -60,7 +75,7 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 					duplicateBoolean = true;
 					return;
 				}
-			})
+			});
 			return duplicateBoolean;
 		},
 		containsMarker : function(title) {
@@ -99,7 +114,7 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			setTimeout(function() {
 				marker.setMap(null);
 				mapViewModel.removeMarker(marker);
-			}, 3000)
+			}, 3000);
 		},
 		deleteAllListings : function() {
 			/* a sane person might think, oh look at that deleteListing function,
@@ -126,7 +141,7 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 		},
 		requestNearbyDetails : function(place) {
 			var match = ko.utils.arrayFirst(mapViewModel.nearbyDetailsSearchResults(), function(p) {
-				return p.place_id == place.place_id
+				return p.place_id == place.place_id;
 			});
 
 			mapViewModel.addDetailsPlace(match);
@@ -153,9 +168,81 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 				closeModal("search-nearby-modal");
 			}
 				
+		},
+		findSearchMatch : function(searchString) {
+			var allWordsInName;
+			var matches = [];
+			searchString = searchString.toLowerCase();
+			ko.utils.arrayForEach(this.placesVisited(), function(place) {
+
+				allWordsInName = place.name.split(" ");
+				allWordsInName = allWordsInName.map(function(w) {return w.toLowerCase();});
+				
+				allWordsInName.forEach(function(word) {
+					if (word.indexOf(searchString) === 0) {
+						matches.push(place);
+						return;
+					}
+				});
+			});
+
+			return matches = (matches.length > 0 ? matches : undefined);
+			
+		},
+		searchCurrentPlaces : function(s) {
+			
+			var matches = mapViewModel.findSearchMatch(s);
+			if (matches === undefined || s === '') {
+				if (s !== '')
+					mapViewModel.numberOfMatches("No Matches Found For " + s);
+				else
+					mapViewModel.numberOfMatches("");
+				ko.utils.arrayForEach(mapViewModel.placesVisited(), function(p) {
+					if (p._destroy !== undefined && p._destroy) {
+						p._destroy = false;
+						var marker = mapViewModel.findMarker(p.formatted_address);
+						marker.setMap(map);
+
+					}
+
+				});
+
+				mapViewModel.placesVisited.valueHasMutated();
+			}
+			else {
+				if (matches.length === 1)
+					mapViewModel.numberOfMatches(1 + " match found for " + s);
+				else
+					mapViewModel.numberOfMatches(matches.length + " matches found for " + s);
+
+				ko.utils.arrayForEach(mapViewModel.placesVisited(), function(p) {
+					if ($.inArray(p, matches) === -1) {
+						var marker = mapViewModel.findMarker(p.formatted_address);
+						marker.setMap(null);
+						mapViewModel.placesVisited.destroy(p);
+					}
+				});
+
+			}
+
+
+			
 		}
 
 	};
 
 	ko.applyBindings(mapViewModel);
+}
+
+/* 
+	I can't seem to get knockout to do what I want. What I want to accomplish in my search function
+	is to register an oninput event so every time the input changes in the search box,
+	to go ahead and filter all the results based on that text, the way im filtering the data
+	is by checking if any words in the name start with the text in the box.
+
+
+*/
+function handleCurrentSearch(inputObject) {
+	var cv = inputObject.value;
+	mapViewModel.searchCurrentPlaces(cv);
 }
