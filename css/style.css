@@ -33,7 +33,6 @@ body {
 #details {
 	height: 100%;
 	display: none;
-	height: 100%;
 	border: 1px solid white;
 	margin-top: 3%;
 	overflow-y: auto;

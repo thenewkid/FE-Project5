@@ -151,7 +151,7 @@ function nearbySearchRadius(place, service, radius, bounds, infoWindow, map) {
   	function nearbySearchCallBack(results, status, pagination) {
 		
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
-			for (var i = 0; i < results.length; i++) {
+			for (var i = 0, len = results.length; i < len; i++) {
 
 				var plce = results[i];
 				service.getDetails({placeId:plce.place_id}, function(p, s) {
@@ -199,25 +199,3 @@ function addMarkerFitMap(place, map, bounds, infoWindow, viewModelName) {
 		}, 3000);
 	});
 }
-/*function initializeMarkers(bounds, infoWindow, map) {
-	var latlngObjects = [
-							{coords: new google.maps.LatLng(41.881832,-87.623177), city: "Chicago, IL"},
-							{coords: new google.maps.LatLng(42.168333,-87.851389), city: "Deerfield, IL"}, 
-							{coords: new google.maps.LatLng(42.033360,-88.083405), city: "Schaumburg, IL"},
-							{coords: new google.maps.LatLng(42.1825, -87.806944), city: "Highland Park, IL"},
-							{coords: new google.maps.LatLng(42.129167, -87.840833), city: "NorthBrook, IL"}
-						];
-
-	latlngObjects.forEach(function(location) {
-		var marker = createMarker(location.city,map,location.coords);
-		addMarker(marker);
-		extendBounds(bounds,location.coords);
-		addMapListener(marker, 'click',function() {
-			infoWindow.setContent(location.city);
-			infoWindow.open(map, this);
-		});
-	});
-
-	map.fitBounds(bounds);
-}*/
-

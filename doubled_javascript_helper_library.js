@@ -29,7 +29,7 @@ function getElement(eid) {
 }
 
 function displayEqualsEmptyQuote(elementId) {
-	return getElement(elementId).style.display == "";
+	return getElement(elementId).style.display === "";
 }
 
 function showModal(modalId) {
@@ -40,7 +40,7 @@ function closeModal(modalId) {
 	$("#" + modalId).modal('hide');
 }
 function displayNone(elementId) {
-	return getElement(elementId).style.display == "none";
+	return getElement(elementId).style.display === "none";
 }
 function log(data) {
 	console.log(data);
