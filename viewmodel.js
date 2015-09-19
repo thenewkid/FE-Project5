@@ -34,10 +34,16 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 				alert("you must enter a value mannnn");
 			else {
 				var locationObject = data.geometry.location;
-				var lat = locationObject.G;
-				var lng = locationObject.K;
+				var keys = Object.keys(locationObject);
+
+				var lat = locationObject[keys[0]];
+				var lng = locationObject[keys[1]];
+				
 				var llCoordsString = lat +','+lng;
 				var searchQuery = data.searchValue;
+
+				
+
 
 
 				var markerMatch = mapViewModel.findMarker(data.formatted_address);
@@ -199,19 +205,26 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			
 			var matches = mapViewModel.findSearchMatch(s);
 			if (matches === undefined || s === '') {
-				if (s !== '')
+				if (s !== '') {
 					mapViewModel.numberOfMatches("No Matches Found For " + s);
-				else
+					ko.utils.arrayForEach(mapViewModel.placesVisited(), function(p) {
+						if ($.inArray(p, matches) === -1) {
+							var marker = mapViewModel.findMarker(p.formatted_address);
+							marker.setMap(null);
+							mapViewModel.placesVisited.destroy(p);
+						}
+					});
+				}
+				else {
 					mapViewModel.numberOfMatches("");
-				ko.utils.arrayForEach(mapViewModel.placesVisited(), function(p) {
-					if (p._destroy !== undefined && p._destroy) {
-						p._destroy = false;
-						var marker = mapViewModel.findMarker(p.formatted_address);
-						marker.setMap(map);
-
-					}
-
-				});
+					ko.utils.arrayForEach(mapViewModel.placesVisited(), function(p) {
+						if (p._destroy !== undefined && p._destroy) {
+							p._destroy = false;
+							var marker = mapViewModel.findMarker(p.formatted_address);
+							marker.setMap(map);
+						}
+					});
+				}
 
 				mapViewModel.placesVisited.valueHasMutated();
 			}

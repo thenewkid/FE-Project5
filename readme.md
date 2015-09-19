@@ -24,8 +24,9 @@ NEW
 1. Then enter in a city like chicago, or dallas and see the results and markers filter. Also when you remove your filter search, 
 1. all the results are back. 
 
-2. There is additional search functionality with foursquare. For each place searched there is a option to search for places in    2. that area that utilizes the foursquare api. All you do is type in a listing lik sushi or hotels or something, and all the json
-2. objects show up in the console. I know I have not added them to the screen because I didn't think it was necessary. I've       2. proven I can do that very easily, I just wanted to get the foursquare implementation done to meet the requirements. 
+2. There is additional search functionality with foursquare. For each place searched there is a option to search for places in that area and they show up in the infoWindow.
+
+3. If there are no matches then all the results go away.
 
 
 
