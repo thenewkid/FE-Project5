@@ -179,14 +179,26 @@ function requestPlaceDetails(place, service) {
 	});
 }
 
-function foursquare(latlng, query) {
+function foursquare(latlng, query, marker, infoWindow, map) {
 	var u = "https://api.foursquare.com/v2/venues/search?client_id=IPSOH0LAWD51GZKGKSF25UGYZZ15ZC4CBDROUO4UWA4OSZLZ&client_secret=3S23FBLSWIVJHRQK0GRJBFQCJOLT1DLI32PJOP4RYXWVVUUT&v=20130815&ll=latlng&query=searchq";
 	var replacementStrings = ["latlng", "searchq"];
 	var userDefinedSearch = replaceAll(u, replacementStrings, [latlng, query]);
 
   	$.ajax({
   		url: userDefinedSearch, 
-  		success:function(e) {log(e);},
+  		success:function(e) {
+  			infowindowHtmlData = "";
+  			foursquareData = e.response;
+  			venues = foursquareData.venues;
+  			venues.forEach(function(e) {
+  				log(e);
+  				infowindowHtmlData += "Name: " + e.name + "<br>" + "Address: " + e.location.address + "<br>";
+  			});
+
+  			infoWindow.setContent(infowindowHtmlData);
+  			infoWindow.open(map, marker);
+
+  		},
   		fail: function(e) {
   			log(e);
   		},

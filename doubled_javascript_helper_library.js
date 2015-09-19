@@ -8,7 +8,7 @@ function ReplacementArgsNotEqualLength(msg) {
 function replaceAll(string, strings, stringArgs) {
 	if (strings.length !== stringArgs.length)
 		throw new ReplacementArgsNotEqualLength("String Arrays Must Be Equal Length");
-
+	
 	stringCopy = string;
 	for (var i = 0; i < strings.length; i++) {
 		stringCopy = replace(stringCopy, strings[i], stringArgs[i]);
@@ -49,5 +49,5 @@ function log(data) {
 function logArgs(dataArray) {
 	dataArray.forEach(function(d) {
 		log(d);
-	})
+	});
 }

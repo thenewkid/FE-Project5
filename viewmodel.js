@@ -24,6 +24,10 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 			setTimeout(function() {
 				markerMatch.setAnimation(null);
 			}, 3000);
+
+			
+			infoWindow.setContent(markerMatch.title);
+			infoWindow.open(map, markerMatch);
 		},
 		searchFoursquare: function(data) {
 			if (data.searchValue === undefined)
@@ -35,7 +39,9 @@ function initializeKnockout(service, bounds, infoWindow, map) {
 				var llCoordsString = lat +','+lng;
 				var searchQuery = data.searchValue;
 
-				foursquare(llCoordsString, searchQuery);
+
+				var markerMatch = mapViewModel.findMarker(data.formatted_address);
+				foursquare(llCoordsString, searchQuery, markerMatch, infoWindow, map);
 			}
 		},
 		showReviewsModal : function(place, event) {
